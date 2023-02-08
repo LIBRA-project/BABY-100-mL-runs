@@ -82,6 +82,11 @@ class Model:
         self.concentrations = ureg.Quantity.from_list(self.concentrations)
         self.times = ureg.Quantity.from_list(self.times)
 
+    def reset(self):
+        self.c_old = 0 * ureg.particle * ureg.m**-3
+        self.concentrations = []
+        self.times = []
+
 
 def quantity_to_activity(Q):
     return Q * SPECIFIC_ACT * MOLAR_MASS
