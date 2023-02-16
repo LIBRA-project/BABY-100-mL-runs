@@ -43,7 +43,7 @@ class Model:
     @property
     def A_wall(self):
         perimeter_wall = 2 * np.pi * (self.radius + self.L_wall)
-        return perimeter_wall * self.height
+        return perimeter_wall * self.height + self.A_top
 
     def source(self, t):
         if t < self.exposure_time:
