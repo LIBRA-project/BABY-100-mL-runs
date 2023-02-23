@@ -27,6 +27,7 @@ class Model:
         self.c_old = 0 * ureg.particle * ureg.m**-3
         self.dt = 1 * ureg.h
         self.exposure_time = 300 * ureg.h
+        self.number_days = 1 * ureg.day
         self.TBR = TBR
 
         self.concentrations = []
@@ -46,7 +47,7 @@ class Model:
         return perimeter_wall * self.height + self.A_top
 
     def source(self, t):
-        if t < self.exposure_time:
+        if t % (24 * ureg.h) < self.exposure_time and t < self.number_days:
             return self.TBR * self.neutron_rate
         else:
             return 0 * self.TBR * self.neutron_rate
@@ -90,3 +91,20 @@ class Model:
 
 def quantity_to_activity(Q):
     return Q * SPECIFIC_ACT * MOLAR_MASS
+
+
+if __name__ == "__main__":
+    pass
+    import matplotlib.pyplot as plt
+
+    model = IntermitentModel(1, 1, 1)
+    model.number_days = 2 * ureg.day
+    model.exposure_time = 12 * ureg.hour
+    sources = []
+    times = np.linspace(0, 6) * ureg.day
+    for t in times:
+        sources.append(model.source(t))
+    sources = pint.Quantity.from_list(sources)
+
+    plt.plot(times, sources)
+    plt.show()
