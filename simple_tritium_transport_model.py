@@ -20,7 +20,7 @@ class Model:
         self.radius = radius
         self.height = height
 
-        self.L_wall = 1 * ureg.cm  # TODO: VERIFY THIS
+        self.L_wall = 0.06 * ureg.inches
 
         self.neutron_rate = 3e8 * ureg.neutron * ureg.s**-1
 
