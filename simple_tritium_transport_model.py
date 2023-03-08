@@ -20,13 +20,14 @@ class Model:
         self.radius = radius
         self.height = height
 
-        self.L_wall = 1 * ureg.cm  # TODO: VERIFY THIS
+        self.L_wall = 0.06 * ureg.inches
 
         self.neutron_rate = 3e8 * ureg.neutron * ureg.s**-1
 
         self.c_old = 0 * ureg.particle * ureg.m**-3
         self.dt = 1 * ureg.h
         self.exposure_time = 300 * ureg.h
+        self.number_days = 1 * ureg.day
         self.TBR = TBR
 
         self.concentrations = []
@@ -43,10 +44,10 @@ class Model:
     @property
     def A_wall(self):
         perimeter_wall = 2 * np.pi * (self.radius + self.L_wall)
-        return perimeter_wall * self.height
+        return perimeter_wall * self.height + self.A_top
 
     def source(self, t):
-        if t < self.exposure_time:
+        if t % (24 * ureg.h) < self.exposure_time and t < self.number_days:
             return self.TBR * self.neutron_rate
         else:
             return 0 * self.TBR * self.neutron_rate
@@ -82,6 +83,28 @@ class Model:
         self.concentrations = ureg.Quantity.from_list(self.concentrations)
         self.times = ureg.Quantity.from_list(self.times)
 
+    def reset(self):
+        self.c_old = 0 * ureg.particle * ureg.m**-3
+        self.concentrations = []
+        self.times = []
+
 
 def quantity_to_activity(Q):
     return Q * SPECIFIC_ACT * MOLAR_MASS
+
+
+if __name__ == "__main__":
+    pass
+    import matplotlib.pyplot as plt
+
+    model = IntermitentModel(1, 1, 1)
+    model.number_days = 2 * ureg.day
+    model.exposure_time = 12 * ureg.hour
+    sources = []
+    times = np.linspace(0, 6) * ureg.day
+    for t in times:
+        sources.append(model.source(t))
+    sources = pint.Quantity.from_list(sources)
+
+    plt.plot(times, sources)
+    plt.show()
