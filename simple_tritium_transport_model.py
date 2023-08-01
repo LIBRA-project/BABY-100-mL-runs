@@ -93,18 +93,5 @@ def quantity_to_activity(Q):
     return Q * SPECIFIC_ACT * MOLAR_MASS
 
 
-if __name__ == "__main__":
-    pass
-    import matplotlib.pyplot as plt
-
-    model = IntermitentModel(1, 1, 1)
-    model.number_days = 2 * ureg.day
-    model.exposure_time = 12 * ureg.hour
-    sources = []
-    times = np.linspace(0, 6) * ureg.day
-    for t in times:
-        sources.append(model.source(t))
-    sources = pint.Quantity.from_list(sources)
-
-    plt.plot(times, sources)
-    plt.show()
+def activity_to_quantity(A):
+    return A / (SPECIFIC_ACT * MOLAR_MASS)
