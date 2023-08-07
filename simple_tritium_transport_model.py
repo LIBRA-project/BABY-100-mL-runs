@@ -30,6 +30,9 @@ class Model:
         self.number_days = 1 * ureg.day
         self.TBR = TBR
 
+        self.k_wall = 1.9e-8 * ureg.m * ureg.s**-1  # from Kumagai
+        self.k_top = 4.9e-7 * ureg.m * ureg.s**-1  # from Kumagai
+
         self.concentrations = []
         self.times = []
 
@@ -53,12 +56,10 @@ class Model:
             return 0 * self.TBR * self.neutron_rate
 
     def Q_wall(self, c_salt):
-        k_wall = 1.9e-8 * ureg.m * ureg.s**-1  # from Kumagai
-        return self.A_wall * k_wall * c_salt
+        return self.A_wall * self.k_wall * c_salt
 
     def Q_top(self, c_salt):
-        k_top = 4.9e-7 * ureg.m * ureg.s**-1  # from Kumagai
-        return self.A_top * k_top * c_salt
+        return self.A_top * self.k_top * c_salt
 
     def equation(self, c, t):
         c *= ureg.particle * ureg.m**-3
