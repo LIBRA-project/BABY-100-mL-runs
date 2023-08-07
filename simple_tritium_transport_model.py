@@ -1,6 +1,7 @@
 import pint
 import numpy as np
 from scipy.optimize import fsolve
+from scipy.integrate import cumulative_trapezoid
 
 ureg = pint.UnitRegistry()
 ureg.setup_matplotlib()
@@ -88,6 +89,26 @@ class Model:
         self.c_old = 0 * ureg.particle * ureg.m**-3
         self.concentrations = []
         self.times = []
+
+    def integrated_release_top(self):
+        top_release = self.Q_top(self.concentrations)
+        integrated_top = cumulative_trapezoid(
+            top_release.to(ureg.particle * ureg.h**-1),
+            self.times.to(ureg.h),
+            initial=0,
+        )
+        integrated_top *= ureg.particle  # attach units
+        return integrated_top
+
+    def integrated_release_wall(self):
+        wall_release = self.Q_wall(self.concentrations)
+        integrated_wall = cumulative_trapezoid(
+            wall_release.to(ureg.particle * ureg.h**-1),
+            self.times.to(ureg.h),
+            initial=0,
+        )
+        integrated_wall *= ureg.particle  # attach units
+        return integrated_wall
 
 
 def quantity_to_activity(Q):
