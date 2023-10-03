@@ -27,9 +27,11 @@ class Model:
 
         self.c_old = 0 * ureg.particle * ureg.m**-3
         self.dt = 1 * ureg.h
-        self.exposure_time = 300 * ureg.h
+        self.exposure_time = 12 * ureg.h
+        self.resting_time = 24 * ureg.h - self.exposure_time
         self.number_days = 1 * ureg.day
         self.TBR = TBR
+        self.irradiations = []
 
         self.k_wall = 1.9e-8 * ureg.m * ureg.s**-1  # from Kumagai
         self.k_top = 4.9e-7 * ureg.m * ureg.s**-1  # from Kumagai
@@ -51,10 +53,19 @@ class Model:
         return perimeter_wall * self.height + self.A_top
 
     def source(self, t):
-        if t % (24 * ureg.h) < self.exposure_time and t < self.number_days:
-            return self.TBR * self.neutron_rate
-        else:
+        if len(self.irradiations) > 0:
+            for irradiation in self.irradiations:
+                irradiation_start = irradiation[0]
+                irradiation_stop = irradiation[1]
+                if irradiation_start < t < irradiation_stop:
+                    return self.TBR * self.neutron_rate
             return 0 * self.TBR * self.neutron_rate
+        
+        else:
+            if t % (self.exposure_time + self.resting_time) < self.exposure_time and t < self.number_days:
+                return self.TBR * self.neutron_rate
+            else:
+                return 0 * self.TBR * self.neutron_rate
 
     def Q_wall(self, c_salt):
         return self.A_wall * self.k_wall * c_salt
