@@ -1,4 +1,5 @@
-from simple_tritium_transport_model import ureg
+from simple_tritium_transport_model import ureg, Model
+import numpy as np
 
 
 def background_sub(measured, background):
@@ -60,3 +61,32 @@ vial_481 = background_sub(0.260 * ureg.Bq, background_8)
 vial_482 = background_sub(0.275 * ureg.Bq, background_8)
 vial_483 = background_sub(1.243 * ureg.Bq, background_8)
 vial_484 = background_sub(0.480 * ureg.Bq, background_8)
+
+baby_diameter = 1.77 * ureg.inches - 2 * 0.06 * ureg.inches  # from CAD drawings
+baby_radius = 0.5 * baby_diameter
+baby_volume = 0.1 * ureg.L
+baby_cross_section = np.pi * baby_radius**2
+baby_height = baby_volume / baby_cross_section
+baby_model = Model(
+    radius=baby_radius,
+    height=baby_height,
+    TBR=3.3e-4 * ureg.particle * ureg.neutron**-1,  # stefano 10/24/2023
+)
+
+fitting_param = 1.1
+
+mass_transport_coeff_factor = 3
+
+baby_model.k_top *= mass_transport_coeff_factor
+baby_model.k_wall *= mass_transport_coeff_factor
+
+baby_model.number_days = 2 * ureg.days
+baby_model.exposure_time = 12 * ureg.hour
+
+baby_model.irradiations = [
+    [0 * ureg.hour, 0 + baby_model.exposure_time],
+    [24 * ureg.hour, 24 * ureg.hour + baby_model.exposure_time],
+]
+
+baby_model.neutron_rate = fitting_param * (1.2e8 + 3.96e8) * ureg.neutron * ureg.s**-1
+baby_model.dt = 0.4 * ureg.h
