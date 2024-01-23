@@ -64,10 +64,7 @@ baby_height = baby_volume / baby_cross_section
 baby_model = Model(
     radius=baby_radius,
     height=baby_height,
-    # TBR=3.3e-4 * ureg.particle * ureg.neutron**-1,  # stefano 10/24/2023
-    TBR=4.79e-4
-    * ureg.particle
-    * ureg.neutron**-1,  # stefano 1/22/2024 (to be updated)
+    TBR=4.78e-4 * ureg.particle * ureg.neutron**-1,  # stefano 1/22/2024
 )
 
 
