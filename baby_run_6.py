@@ -34,7 +34,7 @@ vial_624 = background_sub(0.7118 * ureg.Bq, background)
 # 01/26 9:36 AM = 24 hours
 # 01/27 9:36 AM = 48 hours
 replacement_times = [
-    # 01/25 24:44
+    # 01/25 21:44
     0 * ureg.day + 15 * ureg.hour + 8 * ureg.minute,
     # 01/26 09:22
     1 * ureg.day + 0 * ureg.hour - 14 * ureg.minute,
