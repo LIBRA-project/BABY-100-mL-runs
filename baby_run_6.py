@@ -54,39 +54,52 @@ vial_663 = background_sub(1.074 * ureg.Bq, background)
 vial_664 = background_sub(0.351 * ureg.Bq, background)
 
 # time starts at 01/25 9:36 AM
-# 01/26 9:36 AM = 24 hours
-# 01/27 9:36 AM = 48 hours
+# 01/26 9:36 AM = 24 hours = 1 * ureg.day + 0 * ureg.hour + 0 * ureg.minute
+# 01/27 9:36 AM = 48 hours = 2 * ureg.day + 0 * ureg.hour + 0 * ureg.minute
 replacement_times = [
     # 01/25 21:44
     0 * ureg.day + 15 * ureg.hour + 8 * ureg.minute,
     # 01/26 09:22
-    1 * ureg.day + 0 * ureg.hour - 14 * ureg.minute,
-    # TODO ASK NIKOLA FOR PROPER TIMES
-    # 01/26 22:00
-    1 * ureg.day + 15 * ureg.hour + 0 * ureg.minute,
-    # 01/27 11:00
-    2 * ureg.day + 1 * ureg.hour + 24 * ureg.minute,
-    # 01/28 09:53
-    2 * ureg.day + 24 * ureg.hour + 17 * ureg.minute,
-    # 01/29 08:28
-    3 * ureg.day + 23 * ureg.hour + 52 * ureg.minute,
+    1 * ureg.day
+    + (9 * ureg.hour + 22 * ureg.minute)
+    - (9 * ureg.hour + 36 * ureg.minute),
+    # 01/26 21:46
+    1 * ureg.day
+    + (21 * ureg.hour + 46 * ureg.minute)
+    - (9 * ureg.hour + 36 * ureg.minute),
+    # 01/27 10:48
+    2 * ureg.day
+    + (10 * ureg.hour + 48 * ureg.minute)
+    - (9 * ureg.hour + 36 * ureg.minute),
+    # 01/28 11:19
+    3 * ureg.day
+    + (11 * ureg.hour + 19 * ureg.minute)
+    - (9 * ureg.hour + 36 * ureg.minute),
+    # 01/29 08:02
+    4 * ureg.day
+    + (8 * ureg.hour + 2 * ureg.minute)
+    - (9 * ureg.hour + 36 * ureg.minute),
+    # 01/30 17:00
+    # 5 * ureg.day
+    # + (17 * ureg.hour + 0 * ureg.minute)
+    # - (9 * ureg.hour + 36 * ureg.minute),
 ]
 
 replacement_times = sorted(replacement_times)
 
 baby_diameter = 1.77 * ureg.inches - 2 * 0.06 * ureg.inches  # from CAD drawings
 baby_radius = 0.5 * baby_diameter
-baby_volume = 0.085 * ureg.L
+baby_volume = 0.125 * ureg.L
 baby_cross_section = np.pi * baby_radius**2
 baby_height = baby_volume / baby_cross_section
 baby_model = Model(
     radius=baby_radius,
     height=baby_height,
-    TBR=4.78e-4 * ureg.particle * ureg.neutron**-1,  # stefano 1/22/2024
+    TBR=4.57e-4 * ureg.particle * ureg.neutron**-1,  # stefano 1/22/2024
 )
 
 
-mass_transport_coeff_factor = 3 * 0.6 * 0.9
+mass_transport_coeff_factor = 3 * 0.7
 
 baby_model.k_top *= mass_transport_coeff_factor
 baby_model.k_wall *= mass_transport_coeff_factor
@@ -103,6 +116,6 @@ initial_neutron_rate = (
     (1.2e8 + 3.96e8) * ureg.neutron * ureg.s**-1
 )  # initially measured by activation foils
 
-fitting_param = 0.72
+fitting_param = 0.82
 baby_model.neutron_rate = fitting_param * initial_neutron_rate
 baby_model.dt = 0.05 * ureg.h
