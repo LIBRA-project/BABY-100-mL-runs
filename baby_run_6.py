@@ -19,16 +19,39 @@ def background_sub(measured, background):
         return 0 * ureg.Bq
 
 
-background = 0.2308 * ureg.Bq
-vial_611 = background_sub(0.2388 * ureg.Bq, background)
-vial_612 = background_sub(0.2442 * ureg.Bq, background)
-vial_613 = background_sub(3.5140 * ureg.Bq, background)
-vial_614 = background_sub(0.2950 * ureg.Bq, background)
+background = 0.314 * ureg.Bq
+vial_611 = background_sub(0.288 * ureg.Bq, background)
+vial_612 = background_sub(0.310 * ureg.Bq, background)
+vial_613 = background_sub(4.455 * ureg.Bq, background)
+vial_614 = background_sub(0.396 * ureg.Bq, background)
 
-vial_621 = background_sub(0.2599 * ureg.Bq, background)
-vial_622 = background_sub(0.3967 * ureg.Bq, background)
-vial_623 = background_sub(2.4481 * ureg.Bq, background)
-vial_624 = background_sub(0.7118 * ureg.Bq, background)
+vial_621 = background_sub(0.306 * ureg.Bq, background)
+vial_622 = background_sub(0.300 * ureg.Bq, background)
+vial_623 = background_sub(3.127 * ureg.Bq, background)
+vial_624 = background_sub(0.409 * ureg.Bq, background)
+
+background = 0.305 * ureg.Bq
+vial_631 = background_sub(0.279 * ureg.Bq, background)
+vial_632 = background_sub(0.308 * ureg.Bq, background)
+vial_633 = background_sub(5.725 * ureg.Bq, background)
+vial_634 = background_sub(0.472 * ureg.Bq, background)
+
+vial_641 = background_sub(0.298 * ureg.Bq, background)
+vial_642 = background_sub(0.262 * ureg.Bq, background)
+vial_643 = background_sub(4.809 * ureg.Bq, background)
+vial_644 = background_sub(0.436 * ureg.Bq, background)
+
+vial_651 = background_sub(0.451 * ureg.Bq, background)
+vial_652 = background_sub(0.307 * ureg.Bq, background)
+vial_653 = background_sub(2.920 * ureg.Bq, background)
+vial_654 = background_sub(0 * ureg.Bq, background)  # missing water!!
+
+vial_661 = background_sub(
+    2.780 * ureg.Bq, background
+)  # TODO wait for long run to check this...
+vial_662 = background_sub(0.358 * ureg.Bq, background)
+vial_663 = background_sub(1.074 * ureg.Bq, background)
+vial_664 = background_sub(0.351 * ureg.Bq, background)
 
 # time starts at 01/25 9:36 AM
 # 01/26 9:36 AM = 24 hours
@@ -38,6 +61,15 @@ replacement_times = [
     0 * ureg.day + 15 * ureg.hour + 8 * ureg.minute,
     # 01/26 09:22
     1 * ureg.day + 0 * ureg.hour - 14 * ureg.minute,
+    # TODO ASK NIKOLA FOR PROPER TIMES
+    # 01/26 22:00
+    1 * ureg.day + 15 * ureg.hour + 0 * ureg.minute,
+    # 01/27 11:00
+    2 * ureg.day + 1 * ureg.hour + 24 * ureg.minute,
+    # 01/28 09:53
+    2 * ureg.day + 24 * ureg.hour + 17 * ureg.minute,
+    # 01/29 08:28
+    3 * ureg.day + 23 * ureg.hour + 52 * ureg.minute,
 ]
 
 replacement_times = sorted(replacement_times)
