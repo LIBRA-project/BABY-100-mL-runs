@@ -64,7 +64,7 @@ vial_484 = background_sub(0.480 * ureg.Bq, background_8)
 
 baby_diameter = 1.77 * ureg.inches - 2 * 0.06 * ureg.inches  # from CAD drawings
 baby_radius = 0.5 * baby_diameter
-baby_volume = 0.1 * ureg.L
+baby_volume = 0.125 * ureg.L
 baby_cross_section = np.pi * baby_radius**2
 baby_height = baby_volume / baby_cross_section
 baby_model = Model(
