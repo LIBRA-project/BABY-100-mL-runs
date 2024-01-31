@@ -43,7 +43,7 @@ vial_334 = background_sub(0.706 * ureg.Bq, background_3)
 
 baby_diameter = 1.77 * ureg.inches - 2 * 0.06 * ureg.inches  # from CAD drawings
 baby_radius = 0.5 * baby_diameter
-baby_volume = 0.1 * ureg.L
+baby_volume = 0.125 * ureg.L
 baby_cross_section = np.pi * baby_radius**2
 baby_height = baby_volume / baby_cross_section
 baby_model = Model(
@@ -52,7 +52,7 @@ baby_model = Model(
     TBR=3.3e-4 * ureg.particle * ureg.neutron**-1,  # stefano 10/24/2023
 )
 
-fitting_param = 0.82
+fitting_param = 0.86
 
 mass_transport_coeff_factor = 3
 

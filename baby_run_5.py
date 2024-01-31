@@ -58,17 +58,17 @@ vial_574 = background_sub(0.387 * ureg.Bq, background)
 
 baby_diameter = 1.77 * ureg.inches - 2 * 0.06 * ureg.inches  # from CAD drawings
 baby_radius = 0.5 * baby_diameter
-baby_volume = 0.085 * ureg.L
+baby_volume = 0.125 * ureg.L
 baby_cross_section = np.pi * baby_radius**2
 baby_height = baby_volume / baby_cross_section
 baby_model = Model(
     radius=baby_radius,
     height=baby_height,
-    TBR=4.78e-4 * ureg.particle * ureg.neutron**-1,  # stefano 1/22/2024
+    TBR=4.57e-4 * ureg.particle * ureg.neutron**-1,  # stefano 1/22/2024
 )
 
 
-mass_transport_coeff_factor = 3 * 0.6 * 0.9
+mass_transport_coeff_factor = 3 * 0.7
 
 baby_model.k_top *= mass_transport_coeff_factor
 baby_model.k_wall *= mass_transport_coeff_factor
@@ -85,6 +85,6 @@ initial_neutron_rate = (
     (1.2e8 + 3.96e8) * ureg.neutron * ureg.s**-1
 )  # initially measured by activation foils
 
-fitting_param = 0.72
+fitting_param = 0.82
 baby_model.neutron_rate = fitting_param * initial_neutron_rate
 baby_model.dt = 0.05 * ureg.h
