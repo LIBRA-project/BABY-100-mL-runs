@@ -3,6 +3,7 @@ import numpy as np
 from scipy.optimize import fsolve
 from scipy.integrate import cumulative_trapezoid
 from labellines import labelLine, labelLines
+import matplotlib.pyplot as plt
 
 ureg = pint.UnitRegistry()
 ureg.setup_matplotlib()
@@ -132,9 +133,6 @@ def quantity_to_activity(Q):
 
 def activity_to_quantity(A):
     return A / (SPECIFIC_ACT * MOLAR_MASS)
-
-
-import matplotlib.pyplot as plt
 
 
 def plot_bars(measurements, index=None, bar_width=0.35, stacked=True):
