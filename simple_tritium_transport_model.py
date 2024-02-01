@@ -255,83 +255,79 @@ COLLECTION_VOLUME = 10 * ureg.ml
 LSC_SAMPLE_VOLUME = 10 * ureg.ml
 
 
-def plot_model(
+def plot_sample_activity_top(
     model: Model,
-    top=True,
-    walls=True,
-    irradiation=None,
-    replacement_times=None,
-    linelabel=False,
+    replacement_times,
+    collection_vol=COLLECTION_VOLUME,
+    lsc_sample_vol=LSC_SAMPLE_VOLUME,
+    **kwargs
 ):
-    """_summary_
+    integrated_top = quantity_to_activity(model.integrated_release_top()).to(ureg.Bq)
+    sample_activity_top = integrated_top / collection_vol * lsc_sample_vol
+    times = model.times
+    sample_activity_top, times = replace_water(
+        sample_activity_top, times, replacement_times
+    )
+    l = plt.plot(times.to(ureg.day), sample_activity_top, **kwargs)
+    return l
 
-    Args:
-        model (Model): the model to plot
-        top (bool, optional): _description_. Defaults to True.
-        walls (bool, optional): _description_. Defaults to True.
-        irradiation (list, optional): _description_. Defaults to None.
-        replacement_times (list, optional): _description_. Defaults to None.
-        linelabel (bool, optional): _description_. Defaults to True.
-    """
-    plt.gca().xaxis.set_units(ureg.day)
-    plt.gca().yaxis.set_units(ureg.Bq)
 
-    # subtitle_text = [
-    #     f"TBR = {model.TBR.to(ureg.dimensionless):.2e~P}, salt volume {model.volume.to(ureg.ml):.0f~P}, neutron rate: {model.neutron_rate:.2e~P}, irradiation time: {model.exposure_time}",
-    #     f"collection volume: {COLLECTION_VOLUME:.0f~P}, sample volume: {LSC_SAMPLE_VOLUME:.0f~P}",
-    # ]
-    # plt.gcf().text(0.08, 0.9, s="\n".join(subtitle_text), fontsize=6.5)
+def plot_sample_activity_wall(
+    model: Model,
+    replacement_times,
+    collection_vol=COLLECTION_VOLUME,
+    lsc_sample_vol=LSC_SAMPLE_VOLUME,
+    **kwargs
+):
+    integrated_wall = quantity_to_activity(model.integrated_release_wall()).to(ureg.Bq)
+    sample_activity_wall = integrated_wall / collection_vol * lsc_sample_vol
+    times = model.times
+    sample_activity_wall, times = replace_water(
+        sample_activity_wall, times, replacement_times
+    )
+    l = plt.plot(times.to(ureg.day), sample_activity_wall, **kwargs)
+    return l
 
-    if top:
-        integrated_top = quantity_to_activity(model.integrated_release_top()).to(
-            ureg.Bq
-        )
-        sample_activity_top = integrated_top / COLLECTION_VOLUME * LSC_SAMPLE_VOLUME
-        times = model.times
-        if replacement_times:
-            sample_activity_top, times = replace_water(
-                sample_activity_top,
-                model.times,
-                replacement_times=replacement_times,
-            )
-        plt.plot(
-            times.to(ureg.day),
-            sample_activity_top,
-            color="#023047",
-            label="Top",
-        )
-    if walls:
-        integrated_wall = quantity_to_activity(model.integrated_release_wall()).to(
-            ureg.Bq
-        )
-        sample_activity_wall = integrated_wall / COLLECTION_VOLUME * LSC_SAMPLE_VOLUME
-        times = model.times
-        if replacement_times:
-            sample_activity_wall, times = replace_water(
-                sample_activity_wall,
-                model.times,
-                replacement_times=replacement_times,
-            )
-        plt.plot(
-            times.to(ureg.day),
-            sample_activity_wall,
-            color="tab:green",
-            label="Walls",
-        )
 
-    if irradiation:
-        for irr in irradiation:
-            plt.axvspan(
-                irr[0].to(ureg.day),
-                irr[1].to(ureg.day),
-                facecolor="#EF5B5B",
-                alpha=0.5,
-            )
+def plot_salt_inventory(model: Model, **kwargs):
+    salt_inventory = (quantity_to_activity(model.concentrations) * model.volume).to(
+        ureg.Bq
+    )
+    l = plt.plot(model.times.to(ureg.day), salt_inventory, **kwargs)
+    return l
 
-    plt.xlim(left=0 * ureg.day)
-    plt.ylim(bottom=0)
-    # plt.yscale("log")
-    if linelabel:
-        labelLines(plt.gca().get_lines(), zorder=2.5)
-    plt.gca().spines[["right", "top"]].set_visible(False)
-    plt.grid(alpha=0.5)
+
+def plot_top_release(model: Model, **kwargs):
+    top_release = model.Q_top(model.concentrations)
+    top_release = quantity_to_activity(top_release).to(ureg.Bq * ureg.h**-1)
+    l = plt.plot(model.times.to(ureg.day), top_release, **kwargs)
+    return l
+
+
+def plot_wall_release(model: Model, **kwargs):
+    wall_release = model.Q_wall(model.concentrations)
+    wall_release = quantity_to_activity(wall_release).to(ureg.Bq * ureg.h**-1)
+    l = plt.plot(model.times.to(ureg.day), wall_release, **kwargs)
+    return l
+
+
+def plot_integrated_top_release(model: Model, **kwargs):
+    integrated_top = quantity_to_activity(model.integrated_release_top()).to(ureg.Bq)
+    sample_activity_top = integrated_top / COLLECTION_VOLUME * LSC_SAMPLE_VOLUME
+    l = plt.plot(model.times.to(ureg.day), sample_activity_top, **kwargs)
+    return l
+
+
+def plot_integrated_wall_release(model: Model, **kwargs):
+    integrated_wall = quantity_to_activity(model.integrated_release_wall()).to(ureg.Bq)
+    sample_activity_wall = integrated_wall / COLLECTION_VOLUME * LSC_SAMPLE_VOLUME
+    l = plt.plot(model.times.to(ureg.day), sample_activity_wall, **kwargs)
+    return l
+
+
+def plot_irradiation(model: Model, **kwargs):
+    pols = []
+    for irr in model.irradiations:
+        pol = plt.axvspan(irr[0].to(ureg.day), irr[1].to(ureg.day), **kwargs)
+        pols.append(pol)
+    return pols
