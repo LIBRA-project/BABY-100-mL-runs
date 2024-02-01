@@ -266,9 +266,9 @@ def plot_model(
     model,
     top=True,
     walls=True,
-    detection_limit=0.4 * ureg.Bq,
-    irradiation=True,
-    replace_vials=True,
+    detection_limit=0.2 * ureg.Bq,
+    irradiation=None,
+    replacement_times=None,
     title=True,
     subtitle=True,
     linelabel=True,
@@ -278,6 +278,7 @@ def plot_model(
 
     if title:
         plt.gcf().text(0.08, 0.97, "Sample activity", weight="bold", fontsize=15)
+
     if subtitle:
         subtitle_text = [
             f"TBR = {model.TBR.to(ureg.dimensionless):.2e~P}, salt volume {model.volume.to(ureg.ml):.0f~P}, neutron rate: {model.neutron_rate:.2e~P}, irradiation time: {model.exposure_time}",
@@ -291,11 +292,7 @@ def plot_model(
         )
         sample_activity_top = integrated_top / COLLECTION_VOLUME * LSC_SAMPLE_VOLUME
         times = model.times
-        if replace_vials:
-            if replace_vials is True:
-                replacement_times = None
-            else:
-                replacement_times = replace_vials
+        if replacement_times:
             sample_activity_top, times = replace_water(
                 model,
                 sample_activity_top,
@@ -314,11 +311,7 @@ def plot_model(
         )
         sample_activity_wall = integrated_wall / COLLECTION_VOLUME * LSC_SAMPLE_VOLUME
         times = model.times
-        if replace_vials:
-            if replace_vials is True:
-                replacement_times = None
-            else:
-                replacement_times = replace_vials
+        if replacement_times:
             sample_activity_wall, times = replace_water(
                 model,
                 sample_activity_wall,
@@ -336,22 +329,13 @@ def plot_model(
         plt.axhline(y=detection_limit, color="tab:grey", linestyle="dashed")
 
     if irradiation:
-        if irradiation is True:
-            for day in range(model.number_days.to(ureg.day).magnitude):
-                plt.axvspan(
-                    0 * ureg.h + day * ureg.day,
-                    model.exposure_time + day * ureg.day,
-                    facecolor="#EF5B5B",
-                    alpha=0.5,
-                )
-        else:
-            for irr in irradiation:
-                plt.axvspan(
-                    irr[0].to(ureg.day),
-                    irr[1].to(ureg.day),
-                    facecolor="#EF5B5B",
-                    alpha=0.5,
-                )
+        for irr in irradiation:
+            plt.axvspan(
+                irr[0].to(ureg.day),
+                irr[1].to(ureg.day),
+                facecolor="#EF5B5B",
+                alpha=0.5,
+            )
 
     plt.xlim(left=0 * ureg.day)
     plt.ylim(bottom=0)
