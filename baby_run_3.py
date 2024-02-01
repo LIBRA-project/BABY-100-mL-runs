@@ -1,6 +1,6 @@
 from simple_tritium_transport_model import ureg, Model
 import numpy as np
-from helpers import substract_background_from_measurements
+from helpers import substract_background_from_measurements, cumulative_activity
 
 background_1 = 0.265 * ureg.Bq
 
@@ -38,16 +38,7 @@ replacement_times = [
     4 * ureg.day,
 ]
 
-m = measurements_after_background_sub
-sample_1 = sum(list(m[1].values()))
-sample_2 = sum(list(m[2].values()))
-sample_3 = sum(list(m[3].values()))
-
-cumulative_1 = sample_1
-cumulative_2 = sample_1 + sample_2
-cumulative_3 = sample_1 + sample_2 + sample_3
-
-cumulative_values = [cumulative_1, cumulative_2, cumulative_3]
+cumulative_release = cumulative_activity(measurements_after_background_sub)
 
 baby_diameter = 1.77 * ureg.inches - 2 * 0.06 * ureg.inches  # from CAD drawings
 baby_radius = 0.5 * baby_diameter

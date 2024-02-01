@@ -42,3 +42,22 @@ def substract_background_from_measurements(raw_measurements):
         for i in raw_measurements
     }
     return measurements_after_background_sub
+
+
+def cumulative_activity(measurements):
+    for measurement in measurements.values():
+        if "background" in measurement:
+            raise ValueError("Background should be substracted first")
+
+    total_samples = []
+    for measurement in measurements.values():
+        total_samples.append(sum(list(measurement.values())))
+
+    cumulative_values = []
+    for total_sample in total_samples:
+        if cumulative_values:
+            cumulative_values.append(cumulative_values[-1] + total_sample)
+        else:
+            cumulative_values.append(total_sample)
+
+    return cumulative_values
