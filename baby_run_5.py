@@ -1,22 +1,6 @@
 from simple_tritium_transport_model import ureg, Model
 import numpy as np
-
-
-def background_sub(measured, background):
-    """Substracts the background of a measured activity.
-    Returns zero if the background is greater than measurement.
-
-    Args:
-        measured (pint.Quantity): The measured activity
-        background (pint.Quantity): the background acitivity
-
-    Returns:
-        pint.Quantity: activity with substracted background
-    """
-    if measured > background:
-        return measured - background
-    else:
-        return 0 * ureg.Bq
+from helpers import substract_background_from_measurements
 
 
 background = 0.29 * ureg.Bq
@@ -72,14 +56,9 @@ raw_measurements = {
     },
 }
 
-measurements_after_background_sub = {
-    i: {
-        j: background_sub(act, raw_measurements[i]["background"])
-        for j, act in raw_measurements[i].items()
-        if j != "background"
-    }
-    for i in raw_measurements
-}
+measurements_after_background_sub = substract_background_from_measurements(
+    raw_measurements
+)
 
 baby_diameter = 1.77 * ureg.inches - 2 * 0.06 * ureg.inches  # from CAD drawings
 baby_radius = 0.5 * baby_diameter
