@@ -30,28 +30,26 @@ vial_622 = background_sub(0.300 * ureg.Bq, background)
 vial_623 = background_sub(3.127 * ureg.Bq, background)
 vial_624 = background_sub(0.409 * ureg.Bq, background)
 
-background = 0.305 * ureg.Bq
-vial_631 = background_sub(0.279 * ureg.Bq, background)
-vial_632 = background_sub(0.308 * ureg.Bq, background)
-vial_633 = background_sub(5.725 * ureg.Bq, background)
-vial_634 = background_sub(0.472 * ureg.Bq, background)
+background = 0.301 * ureg.Bq
+vial_631 = background_sub(0.358 * ureg.Bq, background)
+vial_632 = background_sub(0.286 * ureg.Bq, background)
+vial_633 = background_sub(5.735 * ureg.Bq, background)
+vial_634 = background_sub(0.442 * ureg.Bq, background)
 
-vial_641 = background_sub(0.298 * ureg.Bq, background)
-vial_642 = background_sub(0.262 * ureg.Bq, background)
-vial_643 = background_sub(4.809 * ureg.Bq, background)
-vial_644 = background_sub(0.436 * ureg.Bq, background)
+vial_641 = background_sub(0.272 * ureg.Bq, background)
+vial_642 = background_sub(0.299 * ureg.Bq, background)
+vial_643 = background_sub(3.915 * ureg.Bq, background)
+vial_644 = background_sub(0.398 * ureg.Bq, background)
 
-vial_651 = background_sub(0.451 * ureg.Bq, background)
-vial_652 = background_sub(0.307 * ureg.Bq, background)
-vial_653 = background_sub(2.920 * ureg.Bq, background)
+vial_651 = background_sub(0.301 * ureg.Bq, background)
+vial_652 = background_sub(0.305 * ureg.Bq, background)
+vial_653 = background_sub(2.930 * ureg.Bq, background)
 vial_654 = background_sub(0 * ureg.Bq, background)  # missing water!!
 
-vial_661 = background_sub(
-    2.780 * ureg.Bq, background
-)  # TODO wait for long run to check this...
-vial_662 = background_sub(0.358 * ureg.Bq, background)
-vial_663 = background_sub(1.074 * ureg.Bq, background)
-vial_664 = background_sub(0.351 * ureg.Bq, background)
+vial_661 = background_sub(0.301 * ureg.Bq, background)
+vial_662 = background_sub(0.495 * ureg.Bq, background)
+vial_663 = background_sub(1.191 * ureg.Bq, background)
+vial_664 = background_sub(0.361 * ureg.Bq, background)
 
 # time starts at 01/25 9:36 AM
 # 01/26 9:36 AM = 24 hours = 1 * ureg.day + 0 * ureg.hour + 0 * ureg.minute
