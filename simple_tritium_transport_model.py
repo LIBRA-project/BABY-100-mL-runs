@@ -2,6 +2,7 @@ import pint
 import numpy as np
 from scipy.optimize import fsolve
 from scipy.integrate import cumulative_trapezoid
+from labellines import labelLine, labelLines
 
 ureg = pint.UnitRegistry()
 ureg.setup_matplotlib()
@@ -228,3 +229,134 @@ def plot_bars(measurements, index=None, bar_width=0.35, stacked=True):
         )
 
     return index
+
+
+def replace_water(model, sample_activity, time, replacement_times=None):
+    sample_activity_changed = np.copy(sample_activity)
+    times_changed = np.copy(time)
+
+    if replacement_times is None:
+        replacement_times = [
+            i + 1 for i in range(model.number_days.to(ureg.day).magnitude)
+        ] * ureg.day
+    else:
+        replacement_times = sorted(replacement_times)
+
+    for replacement_time in replacement_times:
+        indices = np.where(times_changed > replacement_time)
+        # before each irradiation, make the sample activity drop to zero
+        sample_activity_changed[indices] -= sample_activity_changed[indices][0]
+
+        # insert nan value to induce a line break in plots
+        if indices[0].size > 0:
+            first_index = indices[0][0]
+            sample_activity_changed = np.insert(
+                sample_activity_changed, first_index, np.nan * ureg.Bq
+            )
+            times_changed = np.insert(times_changed, first_index, np.nan * ureg.day)
+
+    return sample_activity_changed, times_changed
+
+
+COLLECTION_VOLUME = 10 * ureg.ml
+LSC_SAMPLE_VOLUME = 10 * ureg.ml
+
+
+def plot_model(
+    model,
+    top=True,
+    walls=True,
+    detection_limit=0.4 * ureg.Bq,
+    irradiation=True,
+    replace_vials=True,
+    title=True,
+    subtitle=True,
+    linelabel=True,
+):
+    plt.gca().xaxis.set_units(ureg.day)
+    plt.gca().yaxis.set_units(ureg.Bq)
+
+    if title:
+        plt.gcf().text(0.08, 0.97, "Sample activity", weight="bold", fontsize=15)
+    if subtitle:
+        subtitle_text = [
+            f"TBR = {model.TBR.to(ureg.dimensionless):.2e~P}, salt volume {model.volume.to(ureg.ml):.0f~P}, neutron rate: {model.neutron_rate:.2e~P}, irradiation time: {model.exposure_time}",
+            f"collection volume: {COLLECTION_VOLUME:.0f~P}, sample volume: {LSC_SAMPLE_VOLUME:.0f~P}",
+        ]
+        plt.gcf().text(0.08, 0.9, s="\n".join(subtitle_text), fontsize=6.5)
+
+    if top:
+        integrated_top = quantity_to_activity(model.integrated_release_top()).to(
+            ureg.Bq
+        )
+        sample_activity_top = integrated_top / COLLECTION_VOLUME * LSC_SAMPLE_VOLUME
+        times = model.times
+        if replace_vials:
+            if replace_vials is True:
+                replacement_times = None
+            else:
+                replacement_times = replace_vials
+            sample_activity_top, times = replace_water(
+                model,
+                sample_activity_top,
+                model.times,
+                replacement_times=replacement_times,
+            )
+        plt.plot(
+            times.to(ureg.day),
+            sample_activity_top,
+            color="#023047",
+            label="Top",
+        )
+    if walls:
+        integrated_wall = quantity_to_activity(model.integrated_release_wall()).to(
+            ureg.Bq
+        )
+        sample_activity_wall = integrated_wall / COLLECTION_VOLUME * LSC_SAMPLE_VOLUME
+        times = model.times
+        if replace_vials:
+            if replace_vials is True:
+                replacement_times = None
+            else:
+                replacement_times = replace_vials
+            sample_activity_wall, times = replace_water(
+                model,
+                sample_activity_wall,
+                model.times,
+                replacement_times=replacement_times,
+            )
+        plt.plot(
+            times.to(ureg.day),
+            sample_activity_wall,
+            color="tab:green",
+            label="Walls",
+        )
+
+    if detection_limit:
+        plt.axhline(y=detection_limit, color="tab:grey", linestyle="dashed")
+
+    if irradiation:
+        if irradiation is True:
+            for day in range(model.number_days.to(ureg.day).magnitude):
+                plt.axvspan(
+                    0 * ureg.h + day * ureg.day,
+                    model.exposure_time + day * ureg.day,
+                    facecolor="#EF5B5B",
+                    alpha=0.5,
+                )
+        else:
+            for irr in irradiation:
+                plt.axvspan(
+                    irr[0].to(ureg.day),
+                    irr[1].to(ureg.day),
+                    facecolor="#EF5B5B",
+                    alpha=0.5,
+                )
+
+    plt.xlim(left=0 * ureg.day)
+    plt.ylim(bottom=0)
+    # plt.yscale("log")
+    if linelabel:
+        labelLines(plt.gca().get_lines(), zorder=2.5)
+    plt.gca().spines[["right", "top"]].set_visible(False)
+    plt.grid(alpha=0.5)
