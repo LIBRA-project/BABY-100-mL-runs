@@ -45,17 +45,28 @@ def substract_background_from_measurements(raw_measurements):
 
 
 def cumulative_activity(measurements):
+    """Calculates the cumulative activity of a set of measurements.
+
+    Args:
+        measurements (dict): The measurements. The keys are the measurement numbers,
+        and the values are dictionaries with the keys being the vial numbers and the
+        values being the measured activities.
+
+    Returns:
+        list: The cumulative activity of the measurements
+    """
     for measurement in measurements.values():
         if "background" in measurement:
             raise ValueError("Background should be substracted first")
 
     total_samples = []
     for measurement in measurements.values():
-        total_samples.append(sum(list(measurement.values())))
+        total_sample = sum(list(measurement.values()))
+        total_samples.append(total_sample)
 
     cumulative_values = []
     for total_sample in total_samples:
-        if cumulative_values:
+        if cumulative_values:  # if list is not empty
             cumulative_values.append(cumulative_values[-1] + total_sample)
         else:
             cumulative_values.append(total_sample)
