@@ -59,6 +59,50 @@ measurements_after_background_sub = substract_background_from_measurements(
     raw_measurements
 )
 
+replacement_times = [
+    12 * ureg.hour,
+    24 * ureg.hour,
+    36 * ureg.hour,
+    48 * ureg.hour,
+    3 * ureg.day,
+    4 * ureg.day,
+    6 * ureg.day,
+]
+
+replacement_times = sorted(replacement_times)
+
+# # Cumulative values
+m = measurements_after_background_sub
+sample_1 = sum(list(m[2].values()))
+sample_2 = sum(list(m[3].values()))
+sample_3 = sum(list(m[4].values()))
+sample_4 = sum(list(m[5].values()))
+sample_5 = sum(list(m[6].values()))
+sample_6 = sum(list(m[7].values()))
+sample_7 = sum(list(m[8].values()))
+
+cumulative_1 = sample_1
+cumulative_2 = sample_1 + sample_2
+cumulative_3 = sample_1 + sample_2 + sample_3
+cumulative_4 = sample_1 + sample_2 + sample_3 + sample_4
+cumulative_5 = sample_1 + sample_2 + sample_3 + sample_4 + sample_5
+cumulative_6 = sample_1 + sample_2 + sample_3 + sample_4 + sample_5 + sample_6
+cumulative_7 = (
+    sample_1 + sample_2 + sample_3 + sample_4 + sample_5 + sample_6 + sample_7
+)
+
+cumulative_values = [
+    cumulative_1,
+    cumulative_2,
+    cumulative_3,
+    cumulative_4,
+    cumulative_5,
+    cumulative_6,
+    cumulative_7,
+]
+
+# Model
+
 baby_diameter = 1.77 * ureg.inches - 2 * 0.06 * ureg.inches  # from CAD drawings
 baby_radius = 0.5 * baby_diameter
 baby_volume = 0.125 * ureg.L

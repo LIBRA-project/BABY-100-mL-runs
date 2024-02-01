@@ -60,6 +60,61 @@ measurements_after_background_sub = substract_background_from_measurements(
     raw_measurements
 )
 
+# time starts at 12/05 9:30 AM
+# 12/06 9:30 AM = 24 hours
+# 12/07 9:30 AM = 48 hours
+replacement_times = [
+    # 12/05 22:58
+    0 * ureg.day + 13 * ureg.hour + 28 * ureg.minute,
+    # 12/06 09:09
+    0 * ureg.day + 23 * ureg.hour + 39 * ureg.minute,
+    # 12/06 21:58
+    1 * ureg.day + 12 * ureg.hour + 28 * ureg.minute,
+    # 12/07 11:19
+    1 * ureg.day + 25 * ureg.hour + 49 * ureg.minute,
+    # 12/08 09:53
+    2 * ureg.day + 24 * ureg.hour + 23 * ureg.minute,
+    # 12/09 08:28
+    3 * ureg.day + 22 * ureg.hour + 58 * ureg.minute,
+    # 12/11 12:48
+    6 * ureg.day + 3 * ureg.hour + 18 * ureg.minute,
+]
+replacement_times = sorted(replacement_times)
+
+# # Cumulative values
+
+m = measurements_after_background_sub
+sample_1 = sum(list(m[1].values()))
+sample_2 = sum(list(m[2].values()))
+sample_3 = sum(list(m[3].values()))
+sample_4 = sum(list(m[4].values()))
+sample_5 = sum(list(m[5].values()))
+sample_6 = sum(list(m[6].values()))
+sample_7 = sum(list(m[7].values()))
+
+cumulative_1 = sample_1
+cumulative_2 = sample_1 + sample_2
+cumulative_3 = sample_1 + sample_2 + sample_3
+cumulative_4 = sample_1 + sample_2 + sample_3 + sample_4
+cumulative_5 = sample_1 + sample_2 + sample_3 + sample_4 + sample_5
+cumulative_6 = sample_1 + sample_2 + sample_3 + sample_4 + sample_5 + sample_6
+cumulative_7 = (
+    sample_1 + sample_2 + sample_3 + sample_4 + sample_5 + sample_6 + sample_7
+)
+
+cumulative_values = [
+    cumulative_1,
+    cumulative_2,
+    cumulative_3,
+    cumulative_4,
+    cumulative_5,
+    cumulative_6,
+    cumulative_7,
+]
+
+
+# Model
+
 baby_diameter = 1.77 * ureg.inches - 2 * 0.06 * ureg.inches  # from CAD drawings
 baby_radius = 0.5 * baby_diameter
 baby_volume = 0.125 * ureg.L
