@@ -153,10 +153,12 @@ def plot_bars(measurements, index=None, bar_width=0.35, stacked=True):
 
     if index is None:
         if stacked:
-            index = np.arange(7)
+            index = np.arange(len(measurements))
         else:
             group_spacing = 1  # Adjust this value to control spacing between groups
-            index = np.arange(7) * (group_spacing / 2 + 1) * bar_width * 4
+            index = (
+                np.arange(len(measurements)) * (group_spacing / 2 + 1) * bar_width * 4
+            )
 
     if stacked:
         vial_3_bar = plt.bar(
