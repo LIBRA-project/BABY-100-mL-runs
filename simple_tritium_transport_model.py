@@ -2,7 +2,6 @@ import pint
 import numpy as np
 from scipy.optimize import fsolve
 from scipy.integrate import cumulative_trapezoid
-from labellines import labelLine, labelLines
 import matplotlib.pyplot as plt
 
 ureg = pint.UnitRegistry()
