@@ -26,7 +26,6 @@ class Model:
 
         self.neutron_rate = 3e8 * ureg.neutron * ureg.s**-1
 
-        self.c_old = 0 * ureg.particle * ureg.m**-3
         self.TBR = TBR
         self.irradiations = []
 
@@ -76,10 +75,11 @@ class Model:
     def run(self, t_final):
         concentration_units = ureg.particle * ureg.m**-3
         time_units = ureg.s
+        initial_concentration = 0
         res = solve_ivp(
             fun=self.rhs,
             t_span=(0, t_final.to(time_units).magnitude),
-            y0=[self.c_old.to(concentration_units).magnitude],
+            y0=[initial_concentration],
             t_eval=np.sort(
                 np.concatenate(
                     [
@@ -96,7 +96,6 @@ class Model:
         self.concentrations = res.y[0] * concentration_units
 
     def reset(self):
-        self.c_old = 0 * ureg.particle * ureg.m**-3
         self.concentrations = []
         self.times = []
 
