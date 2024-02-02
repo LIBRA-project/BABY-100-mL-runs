@@ -51,7 +51,7 @@ baby_model = Model(
     TBR=3.3e-4 * ureg.particle * ureg.neutron**-1,  # stefano 10/24/2023
 )
 
-fitting_param = 0.86
+fitting_param = 0.84
 
 mass_transport_coeff_factor = 3
 

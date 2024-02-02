@@ -80,8 +80,17 @@ class Model:
             fun=self.rhs,
             t_span=(0, t_final.to(time_units).magnitude),
             y0=[self.c_old.to(concentration_units).magnitude],
-            t_eval=np.linspace(0, t_final.to(time_units).magnitude, 1000),
-            method="RK45",
+            t_eval=np.sort(
+                np.concatenate(
+                    [
+                        np.linspace(0, t_final.to(time_units).magnitude, 1000),
+                        [irr[1].to(time_units).magnitude for irr in self.irradiations],
+                    ]
+                )
+            ),
+            # method="RK45",  # RK45 doesn't catch the end of irradiations properly... unless constraining the max_step
+            # max_step=(0.5 * ureg.h).to(time_units).magnitude,
+            method="Radau",
         )
         self.times = res.t * time_units
         self.concentrations = res.y[0] * concentration_units
