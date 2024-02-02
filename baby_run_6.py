@@ -1,52 +1,53 @@
 from simple_tritium_transport_model import ureg, Model
 import numpy as np
-
-
-def background_sub(measured, background):
-    """Substracts the background of a measured activity.
-    Returns zero if the background is greater than measurement.
-
-    Args:
-        measured (pint.Quantity): The measured activity
-        background (pint.Quantity): the background acitivity
-
-    Returns:
-        pint.Quantity: activity with substracted background
-    """
-    if measured > background:
-        return measured - background
-    else:
-        return 0 * ureg.Bq
+from helpers import (
+    substract_background_from_measurements,
+    cumulative_activity,
+    background_sub,
+)
 
 
 background = 0.314 * ureg.Bq
-vial_611 = background_sub(0.288 * ureg.Bq, background)
-vial_612 = background_sub(0.310 * ureg.Bq, background)
-vial_613 = background_sub(4.455 * ureg.Bq, background)
-vial_614 = background_sub(0.396 * ureg.Bq, background)
-
-vial_621 = background_sub(0.306 * ureg.Bq, background)
-vial_622 = background_sub(0.300 * ureg.Bq, background)
-vial_623 = background_sub(3.127 * ureg.Bq, background)
-vial_624 = background_sub(0.409 * ureg.Bq, background)
-
-background = 0.301 * ureg.Bq
-vial_631 = background_sub(0.358 * ureg.Bq, background)
-vial_632 = background_sub(0.286 * ureg.Bq, background)
-vial_633 = background_sub(5.735 * ureg.Bq, background)
-vial_634 = background_sub(0.442 * ureg.Bq, background)
-
-vial_641 = background_sub(0.272 * ureg.Bq, background)
-vial_642 = background_sub(0.299 * ureg.Bq, background)
-vial_643 = background_sub(3.915 * ureg.Bq, background)
-vial_644 = background_sub(0.398 * ureg.Bq, background)
-
-vial_651 = background_sub(0.301 * ureg.Bq, background)
-vial_652 = background_sub(0.305 * ureg.Bq, background)
-vial_653 = background_sub(2.930 * ureg.Bq, background)
-vial_654 = background_sub(0 * ureg.Bq, background)  # missing water!!
-
 background_2_2_2024 = 0.310 * ureg.Bq
+raw_measurements = {
+    1: {
+        1: 0.288 * ureg.Bq,
+        2: 0.310 * ureg.Bq,
+        3: 4.455 * ureg.Bq,
+        4: 0.396 * ureg.Bq,
+        "background": background,
+    },
+    2: {
+        1: 0.306 * ureg.Bq,
+        2: 0.300 * ureg.Bq,
+        3: 3.127 * ureg.Bq,
+        4: 0.409 * ureg.Bq,
+        "background": background,
+    },
+    3: {
+        1: 0.358 * ureg.Bq,
+        2: 0.286 * ureg.Bq,
+        3: 5.735 * ureg.Bq,
+        4: 0.442 * ureg.Bq,
+        "background": background,
+    },
+    4: {
+        1: 0.272 * ureg.Bq,
+        2: 0.299 * ureg.Bq,
+        3: 3.915 * ureg.Bq,
+        4: 0.398 * ureg.Bq,
+        "background": background,
+    },
+    5: {
+        1: 0.301 * ureg.Bq,
+        2: 0.305 * ureg.Bq,
+        3: 2.930 * ureg.Bq,
+        4: 0 * ureg.Bq,  # missing water!!
+        "background": background,
+    },
+}
+
+
 vial_661 = background_sub(0.277 * ureg.Bq, background)
 vial_662 = background_sub(0.310 * ureg.Bq, background_2_2_2024)
 vial_663 = background_sub(1.191 * ureg.Bq, background)
@@ -56,6 +57,24 @@ vial_671 = background_sub(0.276 * ureg.Bq, background_2_2_2024)
 vial_672 = background_sub(0.283 * ureg.Bq, background_2_2_2024)
 vial_673 = background_sub(0.991 * ureg.Bq, background_2_2_2024)
 vial_674 = background_sub(0.635 * ureg.Bq, background_2_2_2024)
+
+measurements_after_background_sub = substract_background_from_measurements(
+    raw_measurements
+)
+
+# TODO find a way to replace
+measurements_after_background_sub[6] = {
+    1: background_sub(0.277 * ureg.Bq, background),
+    2: background_sub(0.310 * ureg.Bq, background_2_2_2024),
+    3: background_sub(1.191 * ureg.Bq, background),
+    4: background_sub(0.361 * ureg.Bq, background),
+}
+measurements_after_background_sub[7] = {
+    1: background_sub(0.276 * ureg.Bq, background_2_2_2024),
+    2: background_sub(0.283 * ureg.Bq, background_2_2_2024),
+    3: background_sub(0.991 * ureg.Bq, background_2_2_2024),
+    4: background_sub(0.635 * ureg.Bq, background_2_2_2024),
+}
 
 # time starts at 01/25 9:36 AM
 # 01/26 9:36 AM = 24 hours = 1 * ureg.day + 0 * ureg.hour + 0 * ureg.minute
@@ -90,6 +109,12 @@ replacement_times = [
 ]
 
 replacement_times = sorted(replacement_times)
+
+# # Cumulative values
+
+cumulative_release = cumulative_activity(measurements_after_background_sub)
+
+# Model
 
 baby_diameter = 1.77 * ureg.inches - 2 * 0.06 * ureg.inches  # from CAD drawings
 baby_radius = 0.5 * baby_diameter
