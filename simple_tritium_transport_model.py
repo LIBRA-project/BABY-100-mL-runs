@@ -27,9 +27,6 @@ class Model:
         self.neutron_rate = 3e8 * ureg.neutron * ureg.s**-1
 
         self.c_old = 0 * ureg.particle * ureg.m**-3
-        self.exposure_time = 12 * ureg.h
-        self.resting_time = 24 * ureg.h - self.exposure_time
-        self.number_days = 1 * ureg.day
         self.TBR = TBR
         self.irradiations = []
 
