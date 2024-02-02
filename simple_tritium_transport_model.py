@@ -102,8 +102,8 @@ class Model:
     def integrated_release_top(self):
         top_release = self.Q_top(self.concentrations)
         integrated_top = cumulative_trapezoid(
-            top_release.to(ureg.particle * ureg.h**-1),
-            self.times.to(ureg.h),
+            top_release.to(ureg.particle * ureg.h**-1).magnitude,
+            self.times.to(ureg.h).magnitude,
             initial=0,
         )
         integrated_top *= ureg.particle  # attach units
@@ -112,8 +112,8 @@ class Model:
     def integrated_release_wall(self):
         wall_release = self.Q_wall(self.concentrations)
         integrated_wall = cumulative_trapezoid(
-            wall_release.to(ureg.particle * ureg.h**-1),
-            self.times.to(ureg.h),
+            wall_release.to(ureg.particle * ureg.h**-1).magnitude,
+            self.times.to(ureg.h).magnitude,
             initial=0,
         )
         integrated_wall *= ureg.particle  # attach units
