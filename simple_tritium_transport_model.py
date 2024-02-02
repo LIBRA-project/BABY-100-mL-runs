@@ -54,22 +54,12 @@ class Model:
         return perimeter_wall * self.height + self.A_top
 
     def source(self, t):
-        if len(self.irradiations) > 0:
-            for irradiation in self.irradiations:
-                irradiation_start = irradiation[0]
-                irradiation_stop = irradiation[1]
-                if irradiation_start < t < irradiation_stop:
-                    return self.TBR * self.neutron_rate
-            return 0 * self.TBR * self.neutron_rate
-
-        else:
-            if (
-                t % (self.exposure_time + self.resting_time) < self.exposure_time
-                and t < self.number_days
-            ):
+        for irradiation in self.irradiations:
+            irradiation_start = irradiation[0]
+            irradiation_stop = irradiation[1]
+            if irradiation_start < t < irradiation_stop:
                 return self.TBR * self.neutron_rate
-            else:
-                return 0 * self.TBR * self.neutron_rate
+        return 0 * self.TBR * self.neutron_rate
 
     def Q_wall(self, c_salt):
         return self.A_wall * self.k_wall * c_salt
