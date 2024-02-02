@@ -46,10 +46,16 @@ vial_652 = background_sub(0.305 * ureg.Bq, background)
 vial_653 = background_sub(2.930 * ureg.Bq, background)
 vial_654 = background_sub(0 * ureg.Bq, background)  # missing water!!
 
-vial_661 = background_sub(0.301 * ureg.Bq, background)
-vial_662 = background_sub(0.495 * ureg.Bq, background)
+background_2_2_2024 = 0.310 * ureg.Bq
+vial_661 = background_sub(0.277 * ureg.Bq, background)
+vial_662 = background_sub(0.310 * ureg.Bq, background_2_2_2024)
 vial_663 = background_sub(1.191 * ureg.Bq, background)
 vial_664 = background_sub(0.361 * ureg.Bq, background)
+
+vial_671 = background_sub(0.276 * ureg.Bq, background_2_2_2024)
+vial_672 = background_sub(0.283 * ureg.Bq, background_2_2_2024)
+vial_673 = background_sub(0.991 * ureg.Bq, background_2_2_2024)
+vial_674 = background_sub(0.635 * ureg.Bq, background_2_2_2024)
 
 # time starts at 01/25 9:36 AM
 # 01/26 9:36 AM = 24 hours = 1 * ureg.day + 0 * ureg.hour + 0 * ureg.minute
@@ -78,9 +84,9 @@ replacement_times = [
     + (8 * ureg.hour + 2 * ureg.minute)
     - (9 * ureg.hour + 36 * ureg.minute),
     # 01/30 17:00
-    # 5 * ureg.day
-    # + (17 * ureg.hour + 0 * ureg.minute)
-    # - (9 * ureg.hour + 36 * ureg.minute),
+    5 * ureg.day
+    + (17 * ureg.hour + 0 * ureg.minute)
+    - (9 * ureg.hour + 36 * ureg.minute),
 ]
 
 replacement_times = sorted(replacement_times)
