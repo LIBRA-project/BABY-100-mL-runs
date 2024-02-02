@@ -1,7 +1,7 @@
 import pint
 import numpy as np
-from scipy.optimize import fsolve
 from scipy.integrate import cumulative_trapezoid
+from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
 
 ureg = pint.UnitRegistry()
@@ -27,7 +27,6 @@ class Model:
         self.neutron_rate = 3e8 * ureg.neutron * ureg.s**-1
 
         self.c_old = 0 * ureg.particle * ureg.m**-3
-        self.dt = 1 * ureg.h
         self.exposure_time = 12 * ureg.h
         self.resting_time = 24 * ureg.h - self.exposure_time
         self.number_days = 1 * ureg.day
@@ -67,28 +66,28 @@ class Model:
     def Q_top(self, c_salt):
         return self.A_top * self.k_top * c_salt
 
-    def equation(self, c, t):
+    def rhs(self, t, c):
+        t *= ureg.s
         c *= ureg.particle * ureg.m**-3
 
-        lhs = self.volume * (c - self.c_old) / self.dt
-        rhs = self.source(t) - self.Q_wall(c) - self.Q_top(c)
-        return lhs - rhs
+        return self.volume.to(ureg.m**3) ** -1 * (
+            self.source(t).to(ureg.particle * ureg.s**-1)
+            - self.Q_wall(c).to(ureg.particle * ureg.s**-1)
+            - self.Q_top(c).to(ureg.particle * ureg.s**-1)
+        )
 
     def run(self, t_final):
-        t = 0 * ureg.s
-        while t < t_final:
-            t += self.dt
-            c_new = (
-                fsolve(self.equation, x0=self.c_old, args=(t,))
-                * ureg.particle
-                * ureg.m**-3
-            )
-            self.c_old = c_new
-
-            self.times.append(t)
-            self.concentrations.append(c_new)
-        self.concentrations = ureg.Quantity.from_list(self.concentrations)
-        self.times = ureg.Quantity.from_list(self.times)
+        concentration_units = ureg.particle * ureg.m**-3
+        time_units = ureg.s
+        res = solve_ivp(
+            fun=self.rhs,
+            t_span=(0, t_final.to(time_units).magnitude),
+            y0=[self.c_old.to(concentration_units).magnitude],
+            t_eval=np.linspace(0, t_final.to(time_units).magnitude, 1000),
+            method="RK45",
+        )
+        self.times = res.t * time_units
+        self.concentrations = res.y[0] * concentration_units
 
     def reset(self):
         self.c_old = 0 * ureg.particle * ureg.m**-3

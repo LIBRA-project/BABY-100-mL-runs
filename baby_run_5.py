@@ -118,4 +118,3 @@ initial_neutron_rate = (
 
 fitting_param = 0.82
 baby_model.neutron_rate = fitting_param * initial_neutron_rate
-baby_model.dt = 0.05 * ureg.h

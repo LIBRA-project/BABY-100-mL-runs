@@ -66,4 +66,3 @@ baby_model.irradiations = [
 ]
 
 baby_model.neutron_rate = fitting_param * (1.2e8 + 3.96e8) * ureg.neutron * ureg.s**-1
-baby_model.dt = 0.4 * ureg.h
