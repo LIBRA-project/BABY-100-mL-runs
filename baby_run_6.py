@@ -122,9 +122,6 @@ mass_transport_coeff_factor = 3 * 0.7
 baby_model.k_top *= mass_transport_coeff_factor
 baby_model.k_wall *= mass_transport_coeff_factor
 
-baby_model.number_days = 2 * ureg.days
-baby_model.exposure_time = 12 * ureg.hour
-
 baby_model.irradiations = [
     [0 * ureg.hour, 0 + baby_model.exposure_time],
     [24 * ureg.hour, 24 * ureg.hour + baby_model.exposure_time],
