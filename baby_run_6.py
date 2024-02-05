@@ -47,24 +47,13 @@ raw_measurements = {
     },
 }
 
-
-vial_661 = background_sub(0.277 * ureg.Bq, background)
-vial_662 = background_sub(0.310 * ureg.Bq, background_2_2_2024)
-vial_663 = background_sub(1.191 * ureg.Bq, background)
-vial_664 = background_sub(0.361 * ureg.Bq, background)
-
-vial_671 = background_sub(0.276 * ureg.Bq, background_2_2_2024)
-vial_672 = background_sub(0.283 * ureg.Bq, background_2_2_2024)
-vial_673 = background_sub(0.991 * ureg.Bq, background_2_2_2024)
-vial_674 = background_sub(0.635 * ureg.Bq, background_2_2_2024)
-
 measurements_after_background_sub = substract_background_from_measurements(
     raw_measurements
 )
 
 # TODO find a way to replace
 measurements_after_background_sub[6] = {
-    1: background_sub(0.277 * ureg.Bq, background),
+    1: background_sub(0.277 * ureg.Bq, background_2_2_2024),
     2: background_sub(0.310 * ureg.Bq, background_2_2_2024),
     3: background_sub(1.191 * ureg.Bq, background),
     4: background_sub(0.361 * ureg.Bq, background),
