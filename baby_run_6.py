@@ -102,8 +102,8 @@ replacement_times = [
     4 * ureg.day
     + (8 * ureg.hour + 2 * ureg.minute)
     - (9 * ureg.hour + 36 * ureg.minute),
-    # 01/30 17:00
-    5 * ureg.day
+    # 01/31 17:00
+    6 * ureg.day
     + (17 * ureg.hour + 0 * ureg.minute)
     - (9 * ureg.hour + 36 * ureg.minute),
 ]
