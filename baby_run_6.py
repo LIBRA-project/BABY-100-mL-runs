@@ -119,8 +119,8 @@ baby_model = Model(
 
 mass_transport_coeff_factor = 3 * 0.7
 
-baby_model.k_top *= mass_transport_coeff_factor
-baby_model.k_wall *= mass_transport_coeff_factor
+baby_model.k_top *= mass_transport_coeff_factor * 0.6
+baby_model.k_wall *= mass_transport_coeff_factor * 2
 
 exposure_time = 12 * ureg.hour
 
@@ -129,9 +129,7 @@ baby_model.irradiations = [
     [24 * ureg.hour, 24 * ureg.hour + exposure_time],
 ]
 
-initial_neutron_rate = (
-    (1.2e8 + 3.96e8) * ureg.neutron * ureg.s**-1
-)  # initially measured by activation foils
-
-fitting_param = 0.82
-baby_model.neutron_rate = fitting_param * initial_neutron_rate
+# calculated from Kevin's activation foil analysis
+P383_neutron_rate = 4.95e8 * ureg.neutron * ureg.s**-1
+A325_neutron_rate = 2.13e8 * ureg.neutron * ureg.s**-1
+baby_model.neutron_rate = P383_neutron_rate + A325_neutron_rate
