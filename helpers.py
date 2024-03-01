@@ -1,4 +1,6 @@
 from simple_tritium_transport_model import ureg
+import matplotlib.ticker as mticker
+import math
 
 
 def background_sub(measured, background):
@@ -72,3 +74,26 @@ def cumulative_activity(measurements):
             cumulative_values.append(total_sample)
 
     return cumulative_values
+
+
+class ScalarFormatterClass(mticker.ScalarFormatter):
+    def format_data(self, value):
+        # docstring inherited
+        e = math.floor(math.log10(abs(value)))
+        s = round(value / 10**e, 10)
+        significand = self._format_maybe_minus_and_locale(
+            "%d" if s % 1 == 0 else "%1.3g",
+            s,  # here is the change! the format %1.3g is used to have 2 significant digits
+        )
+        if e == 0:
+            return significand
+        exponent = self._format_maybe_minus_and_locale("%d", e)
+        if self._useMathText or self._usetex:
+            exponent = "10^{%s}" % exponent
+            return (
+                exponent
+                if s == 1  # reformat 1x10^y as 10^y
+                else rf"{significand} \times {exponent}"
+            )
+        else:
+            return f"{significand}e{exponent}"
