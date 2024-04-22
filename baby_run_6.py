@@ -110,7 +110,7 @@ baby_radius = 0.5 * baby_diameter
 baby_volume = 0.100 * ureg.L
 baby_cross_section = np.pi * baby_radius**2
 baby_height = baby_volume / baby_cross_section
-calculated_TBR = 4.57e-4 * ureg.particle * ureg.neutron**-1  # stefano 1/22/2024
+calculated_TBR = 4.71e-4 * ureg.particle * ureg.neutron**-1
 baby_model = Model(
     radius=baby_radius,
     height=baby_height,
@@ -120,8 +120,8 @@ baby_model = Model(
 
 mass_transport_coeff_factor = 3
 
-baby_model.k_top *= mass_transport_coeff_factor * 0.75
-optimised_ratio = 2.5e-2
+baby_model.k_top *= mass_transport_coeff_factor * 0.7
+optimised_ratio = 3e-2
 baby_model.k_wall = baby_model.k_top * optimised_ratio
 
 exposure_time = 12 * ureg.hour
