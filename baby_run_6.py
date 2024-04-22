@@ -120,8 +120,8 @@ baby_model = Model(
 
 mass_transport_coeff_factor = 3
 
-baby_model.k_top *= mass_transport_coeff_factor * 0.5
-optimised_ratio = 0.15
+baby_model.k_top *= mass_transport_coeff_factor * 0.85
+optimised_ratio = 2e-2
 baby_model.k_wall = baby_model.k_top * optimised_ratio
 
 exposure_time = 12 * ureg.hour
@@ -136,4 +136,6 @@ P383_neutron_rate = 4.95e8 * ureg.neutron * ureg.s**-1
 A325_neutron_rate = 2.13e8 * ureg.neutron * ureg.s**-1
 
 neutron_rate_relative_uncertainty = 0.089
-baby_model.neutron_rate = P383_neutron_rate + A325_neutron_rate
+baby_model.neutron_rate = (
+    P383_neutron_rate + A325_neutron_rate
+) / 2  # the neutron rate is divided by two to acount for the double counting (two detectors)
