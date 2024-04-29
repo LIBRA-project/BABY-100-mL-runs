@@ -49,7 +49,7 @@ raw_measurements = {
         1: 1.217 * ureg.Bq,
         2: 0.365 * ureg.Bq,
         3: 0.323 * ureg.Bq,
-        4: 0.382 * ureg.Bq,
+        4: 0.282 * ureg.Bq,
         "background": background_2,
     },
     7: {
@@ -118,7 +118,7 @@ baby_model = Model(
 
 mass_transport_coeff_factor = 3
 
-baby_model.k_top *= mass_transport_coeff_factor * 0.15
+baby_model.k_top *= mass_transport_coeff_factor * 0.16
 optimised_ratio = 0.1
 baby_model.k_wall = baby_model.k_top * optimised_ratio
 
