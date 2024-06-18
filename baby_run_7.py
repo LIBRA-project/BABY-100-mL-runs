@@ -66,6 +66,13 @@ raw_measurements = {
         4: 0.300 * ureg.Bq,
         "background": background_2,
     },
+    9: {
+        1: 0.783 * ureg.Bq,
+        2: 0.462 * ureg.Bq,
+        3: 0.439 * ureg.Bq,
+        4: 0.340 * ureg.Bq,
+        "background": 0.249 * ureg.Bq,
+    },
 }
 
 measurements_after_background_sub = substract_background_from_measurements(
@@ -93,6 +100,8 @@ replacement_times = [
     6 * ureg.day + 1 * ureg.hour + 14 * ureg.minute,
     # 04/12 15:03
     9 * ureg.day + 4 * ureg.hour + 43 * ureg.minute,
+    # 04/16 06:00
+    13 * ureg.day + 19 * ureg.hour + 40 * ureg.minute,
 ]
 
 replacement_times = sorted(replacement_times)
