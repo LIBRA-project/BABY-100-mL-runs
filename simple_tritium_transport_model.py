@@ -83,14 +83,15 @@ class Model:
             t_eval=np.sort(
                 np.concatenate(
                     [
-                        np.linspace(0, t_final.to(time_units).magnitude, 1000),
+                        np.linspace(0, t_final.to(time_units).magnitude, 10000),
                         [irr[1].to(time_units).magnitude for irr in self.irradiations],
                     ]
                 )
             ),
             # method="RK45",  # RK45 doesn't catch the end of irradiations properly... unless constraining the max_step
             # max_step=(0.5 * ureg.h).to(time_units).magnitude,
-            method="Radau",
+            # method="Radau",
+            method="BDF",
         )
         self.times = res.t * time_units
         self.concentrations = res.y[0] * concentration_units
@@ -253,7 +254,7 @@ def plot_sample_activity_top(
     replacement_times,
     collection_vol=COLLECTION_VOLUME,
     lsc_sample_vol=LSC_SAMPLE_VOLUME,
-    **kwargs
+    **kwargs,
 ):
     integrated_top = quantity_to_activity(model.integrated_release_top()).to(ureg.Bq)
     sample_activity_top = integrated_top / collection_vol * lsc_sample_vol
@@ -270,7 +271,7 @@ def plot_sample_activity_wall(
     replacement_times,
     collection_vol=COLLECTION_VOLUME,
     lsc_sample_vol=LSC_SAMPLE_VOLUME,
-    **kwargs
+    **kwargs,
 ):
     integrated_wall = quantity_to_activity(model.integrated_release_wall()).to(ureg.Bq)
     sample_activity_wall = integrated_wall / collection_vol * lsc_sample_vol
