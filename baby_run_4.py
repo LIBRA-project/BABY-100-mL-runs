@@ -1,6 +1,9 @@
-from simple_tritium_transport_model import ureg, Model
+from libra_toolbox.tritium.model import ureg, Model
 import numpy as np
-from helpers import substract_background_from_measurements, cumulative_activity
+from libra_toolbox.tritium.helpers import (
+    substract_background_from_measurements,
+    cumulative_activity,
+)
 
 background_2 = 0.28 * ureg.Bq
 raw_measurements = {

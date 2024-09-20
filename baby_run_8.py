@@ -1,6 +1,6 @@
-from simple_tritium_transport_model import ureg, Model
+from libra_toolbox.tritium.model import ureg, Model
 import numpy as np
-from helpers import (
+from libra_toolbox.tritium.helpers import (
     substract_background_from_measurements,
     cumulative_activity,
     background_sub,
@@ -91,7 +91,7 @@ cumulative_release = cumulative_activity(measurements_after_background_sub)
 
 baby_diameter = 1.77 * ureg.inches - 2 * 0.06 * ureg.inches  # from CAD drawings
 baby_radius = 0.5 * baby_diameter
-baby_volume = 0.100 * ureg.L # TODO double check this value
+baby_volume = 0.100 * ureg.L  # TODO double check this value
 baby_cross_section = np.pi * baby_radius**2
 baby_height = baby_volume / baby_cross_section
 
