@@ -3,22 +3,38 @@ import numpy as np
 from libra_toolbox.tritium.helpers import (
     substract_background_from_measurements,
     cumulative_activity,
-    background_sub,
 )
 
 
-raw_measurements_top = {}
+raw_measurements_inner_vessel = {
+    1: {
+        1: 0.334 * ureg.Bq,
+        2: 0.320 * ureg.Bq,
+        3: 1.565 * ureg.Bq,
+        4: 0.376 * ureg.Bq,
+        "background": 0.320
+        * ureg.Bq,  # took vial 2 here for the background because we haven't measured it yet
+    },
+    2: {
+        1: 0.334 * ureg.Bq,
+        2: 0.338 * ureg.Bq,
+        3: 3.094 * ureg.Bq,
+        4: 0.609 * ureg.Bq,
+        "background": 0.320 * ureg.Bq,  # don't have a real background here
+    },
+}
 
-measurements_top_after_background_sub = substract_background_from_measurements(
-    raw_measurements_top
+measurements_inner_vessel_after_background_sub = substract_background_from_measurements(
+    raw_measurements_inner_vessel
 )
 
 
 # time starts at 11/4/2024 10:00 AM
 replacement_times_top = [
     # 11/5/2024 10:00 AM
-    24
-    * ureg.hour,
+    24 * ureg.hour,
+    # 11/7/2024 10:00 AM
+    3 * ureg.day,
 ]
 
 replacement_times_top = sorted(replacement_times_top)
@@ -29,7 +45,9 @@ replacement_times_walls = sorted(replacement_times_walls)
 
 # # Cumulative values
 
-cumulative_release_top = cumulative_activity(measurements_top_after_background_sub)
+cumulative_release_top = cumulative_activity(
+    measurements_inner_vessel_after_background_sub
+)
 
 
 # Model
@@ -48,9 +66,10 @@ baby_model = Model(
     TBR=calculated_TBR,
 )
 
-mass_transport_coeff_factor = 3
+mass_transport_coeff_factor = 3 * 0.7 * 0.07
 
-baby_model.k_top *= mass_transport_coeff_factor * 0.7
+baby_model.k_top *= mass_transport_coeff_factor
+
 optimised_ratio = 3e-2
 baby_model.k_wall = baby_model.k_top * optimised_ratio
 
