@@ -1,0 +1,52 @@
+Assay Definition
+
+Assay Description:
+
+Assay Type: DPM (Single)
+Report Name: Report1
+Output Data Path: C:\Packard\Tricarb\Results\Default\NEW_Flibe_Long\20241107_1535\Replay_20241112_125453
+Raw Results Path: C:\Packard\Tricarb\Results\Default\NEW_Flibe_Long\20241107_1535\20241107_1535.results
+Comma-Delimited File Name: C:\Packard\Tricarb\Results\Default\NEW_Flibe_Long\20241107_1535\Replay_20241112_125453\1L_IV_1-2-X.csv
+Assay File Name: C:\Packard\TriCarb\Assays\NEW_Flibe_Long.lsa
+
+Additional Data Files Generated with this Protocol:
+Report1
+		[Excel]	1L_IV_1-2-X.csv
+
+
+Count Conditions
+
+Nuclide: Low Energy Test      
+   Quench Indicator: tSIE/AEC
+   External Std Terminator (sec): 0.5 2s%
+   Pre-Count Delay (min): 0.00
+Quench Set:                   
+   Low Energy: 3H-UG
+Count Time (min): 120.00
+Count Mode: Normal                                          
+Assay Count Cycles: 1         Repeat Sample Count: 1        
+Number of Vials/Sample: 1     Calculate % Reference: Off                                  
+
+
+Background Subtract: Off
+Low CPM Threshold: Off
+2 Sigma % Terminator: Off
+
+Regions         LL       UL
+A              0.0     18.6
+B              2.0     18.6
+C              4.0     18.6
+
+
+Count Corrections
+
+Static Controller: On         Luminescence Correction: On     GCT: n/a
+Colored Samples: Off          Heterogeneity Monitor: Off      PAC: Disabled
+Coincidence Time (nsec): 18   Delay Before Burst (nsec): 75   PAC Strength: n/a   Auxiliary Spectrum: n/a
+
+
+S#,Count Time,CPMA,DPM1,SIS,tSIE,MESSAGES,Bq:1,LUM
+1,120.00,7,20.0,1062.95,322.84,,0.334,1
+2,120.00,6,20.3,1051.31,292.34,,0.338,0
+3,120.00,55,185.6,504.67,291.12,,3.094,0
+4,120.00,11,36.5,926.95,291.78,,0.609,0
