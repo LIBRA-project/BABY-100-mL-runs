@@ -19,4 +19,4 @@ jobs:
 
       - name: Run notebooks
         run: |
-          jupyter nbconvert --to notebook --execute *.ipynb
+          jupyter nbconvert --to notebook --execute */*.ipynb
