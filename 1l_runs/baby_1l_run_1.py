@@ -41,6 +41,19 @@ file_reader_2 = LSCFileReader(
 )
 file_reader_2.read_file()
 
+file_reader_3 = LSCFileReader(
+    "data/IV_1-3-X_BL-1.csv",
+    vial_labels=[
+        "IV-BL-1",
+        None,
+        "IV-1-3-1",
+        "IV-1-3-2",  # probably has a statistic issue
+        "IV-1-3-3",
+        "IV-1-3-4",
+    ],
+)
+file_reader_3.read_file()
+
 
 sample_0_IV = LIBRASample(
     samples=[
@@ -66,16 +79,26 @@ sample_2_IV = LIBRASample(
     time="11/7/2024 8:49 AM",
 )
 
+sample_3_IV = LIBRASample(
+    samples=[
+        LSCSample.from_file(file_reader_3, label)
+        for label in ["IV-1-3-1", "IV-1-3-2", "IV-1-3-3", "IV-1-3-4"]
+    ],
+    time="11/10/2024 1:33 PM",
+)
+blank_sample_3_IV = LSCSample.from_file(file_reader_3, "IV-BL-1")
+
 start_time = "11/4/2024 10:07 AM"
 
-IV_stream = GasStream([sample_1_IV, sample_2_IV], start_time=start_time)
+IV_stream = GasStream([sample_1_IV, sample_2_IV, sample_3_IV], start_time=start_time)
 
 # substract background
-for sample in IV_stream.samples:
+for sample in [sample_1_IV, sample_2_IV]:
     sample.substract_background(
         background_sample=LSCSample(activity=0.320 * ureg.Bq, name="background")
     )  # TODO don't have a real background here
 
+sample_3_IV.substract_background(background_sample=blank_sample_3_IV)
 
 # create run
 run = LIBRARun(streams=[IV_stream], start_time=start_time)
@@ -115,10 +138,10 @@ baby_cross_section = np.pi * baby_radius**2
 baby_height = baby_volume / baby_cross_section
 
 # from OpenMC
-calculated_TBR = 2.5e-3 * ureg.particle * ureg.neutron**-1
+calculated_TBR = 2.0e-3 * ureg.particle * ureg.neutron**-1
 
 optimised_ratio = 3e-2
-k_top = 7.2e-8 * ureg.m * ureg.s**-1
+k_top = 7.8e-8 * ureg.m * ureg.s**-1
 k_wall = optimised_ratio * k_top
 
 exposure_time = 12 * ureg.hour
