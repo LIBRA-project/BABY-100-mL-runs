@@ -118,22 +118,17 @@ baby_volume = 0.125 * ureg.L
 baby_cross_section = np.pi * baby_radius**2
 baby_height = baby_volume / baby_cross_section
 calculated_TBR = 4.57e-4 * ureg.particle * ureg.neutron**-1  # stefano 1/22/2024
-baby_model = Model(
-    radius=baby_radius,
-    height=baby_height,
-    TBR=calculated_TBR,
-)
 
 
 mass_transport_coeff_factor = 3
 
-baby_model.k_top *= mass_transport_coeff_factor * 0.16
+k_top = 4.9e-7 * ureg.m * ureg.s**-1 * mass_transport_coeff_factor * 0.16
 optimised_ratio = 0.1
-baby_model.k_wall = baby_model.k_top * optimised_ratio
+k_wall = k_top * optimised_ratio
 
 exposure_time = 12 * ureg.hour
 
-baby_model.irradiations = [
+irradiations = [
     [0 * ureg.hour, 0 + exposure_time],
     [24 * ureg.hour, 24 * ureg.hour + exposure_time],
 ]
@@ -143,4 +138,14 @@ P383_neutron_rate = 4.95e8 * ureg.neutron * ureg.s**-1
 A325_neutron_rate = 2.13e8 * ureg.neutron * ureg.s**-1
 
 neutron_rate_relative_uncertainty = 0.089
-baby_model.neutron_rate = (P383_neutron_rate + A325_neutron_rate) * 0.5
+neutron_rate = (P383_neutron_rate + A325_neutron_rate) * 0.5
+
+baby_model = Model(
+    radius=baby_radius,
+    height=baby_height,
+    TBR=calculated_TBR,
+    k_top=k_top,
+    k_wall=k_wall,
+    neutron_rate=neutron_rate,
+    irradiations=irradiations,
+)
