@@ -54,6 +54,28 @@ file_reader_3 = LSCFileReader(
 )
 file_reader_3.read_file()
 
+file_reader_4 = LSCFileReader(
+    "data/Report1.csv",
+    vial_labels=[
+        "BL-1_count_4",
+        None,
+        "IV-1-4-1",
+        "IV-1-4-2",
+        "IV-1-4-3",
+        "IV-1-4-4",
+        None,
+        "OV-1-1-1",
+        "OV-1-1-2",
+        "OV-1-1-3",
+        "OV-1-1-4",
+        None,
+        "IV-1-3-2 (repeat)",
+    ],
+)
+file_reader_4.read_file()
+
+
+# Make samples
 
 sample_0_IV = LIBRASample(
     samples=[
@@ -81,16 +103,43 @@ sample_2_IV = LIBRASample(
 
 sample_3_IV = LIBRASample(
     samples=[
-        LSCSample.from_file(file_reader_3, label)
-        for label in ["IV-1-3-1", "IV-1-3-2", "IV-1-3-3", "IV-1-3-4"]
+        LSCSample.from_file(file_reader_3, "IV-1-3-1"),
+        LSCSample.from_file(
+            file_reader_4, "IV-1-3-2 (repeat)"
+        ),  # the first one has a statistic issue
+        LSCSample.from_file(file_reader_3, "IV-1-3-3"),
+        LSCSample.from_file(file_reader_3, "IV-1-3-4"),
     ],
     time="11/10/2024 1:33 PM",
 )
 blank_sample_3_IV = LSCSample.from_file(file_reader_3, "IV-BL-1")
 
+
+sample_4_IV = LIBRASample(
+    samples=[
+        LSCSample.from_file(file_reader_4, label)
+        for label in ["IV-1-4-1", "IV-1-4-2", "IV-1-4-3", "IV-1-4-4"]
+    ],
+    time="11/13/2024 2:31 PM",
+)
+blank_sample_4 = LSCSample.from_file(file_reader_4, "BL-1_count_4")
+
+sample_1_OV = LIBRASample(
+    samples=[
+        LSCSample.from_file(file_reader_4, label)
+        for label in ["OV-1-1-1", "OV-1-1-2", "OV-1-1-3", "OV-1-1-4"]
+    ],
+    time="11/13/2024 2:31 PM",
+)
+
+# Make streams
+
 start_time = "11/4/2024 10:07 AM"
 
-IV_stream = GasStream([sample_1_IV, sample_2_IV, sample_3_IV], start_time=start_time)
+IV_stream = GasStream(
+    [sample_1_IV, sample_2_IV, sample_3_IV, sample_4_IV], start_time=start_time
+)
+OV_stream = GasStream([sample_1_OV], start_time=start_time)
 
 # substract background
 for sample in [sample_1_IV, sample_2_IV]:
@@ -99,9 +148,11 @@ for sample in [sample_1_IV, sample_2_IV]:
     )  # TODO don't have a real background here
 
 sample_3_IV.substract_background(background_sample=blank_sample_3_IV)
+sample_4_IV.substract_background(background_sample=blank_sample_4)
+sample_1_OV.substract_background(background_sample=blank_sample_4)
 
 # create run
-run = LIBRARun(streams=[IV_stream], start_time=start_time)
+run = LIBRARun(streams=[IV_stream, OV_stream], start_time=start_time)
 
 # check that background is always substracted
 for stream in run.streams:
@@ -115,16 +166,20 @@ for stream in run.streams:
 replacement_times_top = [
     sample.get_relative_time(start_time) for sample in IV_stream.samples
 ]
+replacement_times_walls = [
+    sample.get_relative_time(start_time) for sample in OV_stream.samples
+]
 
 # convert timedelta to pint quantity  # TODO add this to libra-toolbox
 
 replacement_times_top = [
     time.total_seconds() * ureg.second for time in replacement_times_top
 ]
+replacement_times_walls = [
+    time.total_seconds() * ureg.second for time in replacement_times_walls
+]
 
 replacement_times_top = sorted(replacement_times_top)
-
-replacement_times_walls = []
 
 replacement_times_walls = sorted(replacement_times_walls)
 
