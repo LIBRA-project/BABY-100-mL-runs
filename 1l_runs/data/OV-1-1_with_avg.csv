@@ -1,0 +1,85 @@
+Assay Definition
+
+Assay Description:
+
+Assay Type: DPM (Single)
+Report Name: Report1
+Output Data Path: C:\Packard\Tricarb\Results\Default\NEW_Flibe_Long\20241115_1505\Replay_20241118_141329
+Raw Results Path: C:\Packard\Tricarb\Results\Default\NEW_Flibe_Long\20241115_1505\20241115_1505.results
+Comma-Delimited File Name: C:\Packard\Tricarb\Results\Default\NEW_Flibe_Long\20241115_1505\Replay_20241118_141329\Report1_TEST.csv
+Assay File Name: C:\Packard\TriCarb\Assays\NEW_Flibe_Long.lsa
+
+
+Count Conditions
+
+Nuclide: Low Energy Test      
+   Quench Indicator: tSIE/AEC
+   External Std Terminator (sec): 0.5 2s%
+   Pre-Count Delay (min): 0.00
+Quench Set:                   
+   Low Energy: 3H-UG
+Count Time (min): 120.00
+Count Mode: Normal                                          
+Assay Count Cycles: 1         Repeat Sample Count: 6        
+Number of Vials/Sample: 1     Calculate % Reference: Off                                  
+
+
+Background Subtract: Off
+Low CPM Threshold: Off
+2 Sigma % Terminator: Off
+
+Regions         LL       UL
+A              0.0     18.6
+B              2.0     18.6
+C              4.0     18.6
+
+
+Count Corrections
+
+Static Controller: On         Luminescence Correction: On     GCT: n/a
+Colored Samples: Off          Heterogeneity Monitor: Off      PAC: Disabled
+Coincidence Time (nsec): 18   Delay Before Burst (nsec): 75   PAC Strength: n/a   Auxiliary Spectrum: n/a
+
+
+S#,Count Time,CPMA,DPM1,SIS,tSIE,MESSAGES,Bq:1,LUM
+1,120.00,6,18.7,1015.73,290.84,,0.311,5
+1,120.00,6,18.9,1057.79,291.66,,0.316,3
+1,120.00,5,17.0,1046.46,290.70,,0.283,2
+1,120.00,6,18.9,1029.45,291.51,,0.315,2
+1,120.00,6,19.1,1042.88,291.08,,0.318,1
+1,120.00,6,19.5,1063.09,290.73,,0.326,1
+,,6,18.7,1042.57,291.09,A,0.311,2
+
+Missing vial 2.
+3,120.00,9,27.2,897.88,324.36,,0.453,8
+3,120.00,9,26.1,842.21,324.78,,0.435,8
+3,120.00,9,26.4,909.76,324.81,,0.440,7
+3,120.00,8,24.8,928.72,324.47,,0.413,6
+3,120.00,8,26.0,898.73,323.92,,0.434,6
+3,120.00,8,24.7,895.17,323.37,,0.412,5
+,,8,25.9,895.41,324.29,A,0.431,7
+
+4,120.00,7,26.2,965.67,278.97,,0.437,1
+4,120.00,8,27.8,1000.87,277.88,,0.464,1
+4,120.00,7,26.3,999.46,277.97,,0.439,1
+4,120.00,8,26.5,1046.15,278.80,,0.442,1
+4,120.00,8,27.0,963.84,278.12,,0.450,1
+4,120.00,7,25.2,991.31,278.91,,0.420,1
+,,8,26.5,994.55,278.44,A,0.442,1
+
+5,120.00,6,21.5,1030.44,267.88,,0.359,1
+5,120.00,6,22.0,1022.74,267.94,,0.367,1
+5,120.00,6,22.3,1012.74,267.73,,0.371,1
+5,120.00,6,22.0,1004.28,268.28,,0.366,1
+5,120.00,6,21.0,1016.85,267.21,,0.349,1
+5,120.00,6,22.1,988.67,265.17,,0.368,1
+,,6,21.8,1012.62,267.37,A,0.363,1
+
+6,120.00,5,18.3,1077.14,290.37,,0.304,0
+6,120.00,5,18.6,1089.49,291.29,,0.310,0
+6,120.00,6,19.3,1028.31,291.54,,0.321,0
+6,120.00,6,20.0,1031.46,289.60,,0.333,0
+6,120.00,7,22.1,1036.34,292.40,,0.368,0
+6,120.00,6,20.4,1070.77,290.09,,0.341,0
+,,6,19.8,1055.58,290.88,A,0.330,0
+

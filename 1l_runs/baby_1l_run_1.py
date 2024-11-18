@@ -75,6 +75,49 @@ file_reader_4 = LSCFileReader(
 file_reader_4.read_file()
 
 
+file_reader_OV_1_recount = LSCFileReader(
+    "data/OV-1-1_with_avg.csv",
+    vial_labels=[
+        "BL-1_1",
+        "BL-1_2",
+        "BL-1_3",
+        "BL-1_4",
+        "BL-1_5",
+        "BL-1_6",
+        "BL-1_avg",
+        None,
+        "OV-1-1-1_1",
+        "OV-1-1-1_2",
+        "OV-1-1-1_3",
+        "OV-1-1-1_4",
+        "OV-1-1-1_5",
+        "OV-1-1-1_6",
+        "OV-1-1-1_avg",
+        "OV-1-1-2_1",
+        "OV-1-1-2_2",
+        "OV-1-1-2_3",
+        "OV-1-1-2_4",
+        "OV-1-1-2_5",
+        "OV-1-1-2_6",
+        "OV-1-1-2_avg",
+        "OV-1-1-3_1",
+        "OV-1-1-3_2",
+        "OV-1-1-3_3",
+        "OV-1-1-3_4",
+        "OV-1-1-3_5",
+        "OV-1-1-3_6",
+        "OV-1-1-3_avg",
+        "OV-1-1-4_1",
+        "OV-1-1-4_2",
+        "OV-1-1-4_3",
+        "OV-1-1-4_4",
+        "OV-1-1-4_5",
+        "OV-1-1-4_6",
+        "OV-1-1-4_avg",
+    ],
+)
+file_reader_OV_1_recount.read_file()
+
 # Make samples
 
 sample_0_IV = LIBRASample(
@@ -126,11 +169,12 @@ blank_sample_4 = LSCSample.from_file(file_reader_4, "BL-1_count_4")
 
 sample_1_OV = LIBRASample(
     samples=[
-        LSCSample.from_file(file_reader_4, label)
-        for label in ["OV-1-1-1", "OV-1-1-2", "OV-1-1-3", "OV-1-1-4"]
+        LSCSample.from_file(file_reader_OV_1_recount, label)
+        for label in ["OV-1-1-1_avg", "OV-1-1-2_avg", "OV-1-1-3_avg", "OV-1-1-4_avg"]
     ],
     time="11/13/2024 2:31 PM",
 )
+blank_sample_1_OV = LSCSample.from_file(file_reader_OV_1_recount, "BL-1_avg")
 
 # Make streams
 
@@ -149,7 +193,7 @@ for sample in [sample_1_IV, sample_2_IV]:
 
 sample_3_IV.substract_background(background_sample=blank_sample_3_IV)
 sample_4_IV.substract_background(background_sample=blank_sample_4)
-sample_1_OV.substract_background(background_sample=blank_sample_4)
+sample_1_OV.substract_background(background_sample=blank_sample_1_OV)
 
 # create run
 run = LIBRARun(streams=[IV_stream, OV_stream], start_time=start_time)
