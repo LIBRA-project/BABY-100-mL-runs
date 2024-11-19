@@ -118,6 +118,24 @@ file_reader_OV_1_recount = LSCFileReader(
 )
 file_reader_OV_1_recount.read_file()
 
+file_reader_5 = LSCFileReader(
+    "data/1L_BL-1_IV-1-5_OV-1-2.csv",
+    vial_labels=[
+        "1L-BL-1",
+        None,
+        "IV-1-5-1",
+        "IV-1-5-2",
+        "IV-1-5-3",
+        "IV-1-5-4",
+        None,
+        "OV-1-2-1",
+        "OV-1-2-2",
+        "OV-1-2-3",
+        "OV-1-2-4",
+    ],
+)
+file_reader_5.read_file()
+
 # Make samples
 
 sample_0_IV = LIBRASample(
@@ -176,14 +194,34 @@ sample_1_OV = LIBRASample(
 )
 blank_sample_1_OV = LSCSample.from_file(file_reader_OV_1_recount, "BL-1_avg")
 
+
+sample_5_IV = LIBRASample(
+    samples=[
+        LSCSample.from_file(file_reader_5, label)
+        for label in ["IV-1-5-1", "IV-1-5-2", "IV-1-5-3", "IV-1-5-4"]
+    ],
+    time="11/18/2024 1:40 PM",
+)
+sample_5_IV_background = LSCSample.from_file(file_reader_5, "1L-BL-1")
+sample_2_OV_background = sample_5_IV_background
+
+sample_2_OV = LIBRASample(
+    samples=[
+        LSCSample.from_file(file_reader_5, label)
+        for label in ["OV-1-2-1", "OV-1-2-2", "OV-1-2-3", "OV-1-2-4"]
+    ],
+    time="11/18/2024 1:40 PM",
+)
+
 # Make streams
 
 start_time = "11/4/2024 10:07 AM"
 
 IV_stream = GasStream(
-    [sample_1_IV, sample_2_IV, sample_3_IV, sample_4_IV], start_time=start_time
+    [sample_1_IV, sample_2_IV, sample_3_IV, sample_4_IV, sample_5_IV],
+    start_time=start_time,
 )
-OV_stream = GasStream([sample_1_OV], start_time=start_time)
+OV_stream = GasStream([sample_1_OV, sample_2_OV], start_time=start_time)
 
 # substract background
 for sample in [sample_1_IV, sample_2_IV]:
@@ -193,7 +231,9 @@ for sample in [sample_1_IV, sample_2_IV]:
 
 sample_3_IV.substract_background(background_sample=blank_sample_3_IV)
 sample_4_IV.substract_background(background_sample=blank_sample_4)
+sample_5_IV.substract_background(background_sample=sample_5_IV_background)
 sample_1_OV.substract_background(background_sample=blank_sample_1_OV)
+sample_2_OV.substract_background(background_sample=sample_2_OV_background)
 
 # create run
 run = LIBRARun(streams=[IV_stream, OV_stream], start_time=start_time)
@@ -237,10 +277,10 @@ baby_cross_section = np.pi * baby_radius**2
 baby_height = baby_volume / baby_cross_section
 
 # from OpenMC
-calculated_TBR = 2.0e-3 * ureg.particle * ureg.neutron**-1
+calculated_TBR = 1.9e-3 * ureg.particle * ureg.neutron**-1
 
 optimised_ratio = 3e-2
-k_top = 7.8e-8 * ureg.m * ureg.s**-1
+k_top = 8.9e-8 * ureg.m * ureg.s**-1
 k_wall = optimised_ratio * k_top
 
 exposure_time = 12 * ureg.hour
