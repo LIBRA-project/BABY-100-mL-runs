@@ -1,4 +1,4 @@
-git+https://github.com/libra-project/libra-toolbox@ea94769e1e3dedb4eab2e7235102df9fb165431b
+git+https://github.com/libra-project/libra-toolbox@v0.2
 ipykernel
 nbconvert
 matplotlib-label-lines
