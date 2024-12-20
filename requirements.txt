@@ -2,4 +2,4 @@ git+https://github.com/libra-project/libra-toolbox@v0.2
 ipykernel
 nbconvert
 matplotlib-label-lines
-h-transport-materials
+h-transport-materials~=0.17
